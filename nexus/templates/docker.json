@@ -1,0 +1,31 @@
+{
+    "name": "docker-$DOCKER",
+    "docker": {
+        "v1Enabled": true,
+        "forceBasicAuth": false
+    },
+    "dockerProxy": {
+        "indexType": "$TYPE",
+        "cacheForeignLayers": true,
+        "foreignLayerUrlWhitelist": [".*"]
+    },
+    "proxy": {
+        "remoteUrl": "$URL",
+        "contentMaxAge": 1440,
+        "metadataMaxAge": 1440
+    },
+    "storage": {
+        "blobStoreName": "docker",
+        "strictContentTypeValidation": true
+    },
+    "cleanup": null,
+    "online": true,
+    "negativeCache": {
+        "enabled": true,
+        "timeToLive": 1440
+    },
+    "httpClient": {
+        "blocked": false,
+        "autoBlock": true
+    }
+}
