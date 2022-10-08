@@ -1,0 +1,30 @@
+{
+    "name": "apt-$REPOSITORY",
+    "apt": {
+        "distribution": "$REPOSITORY",
+        "flat": false
+    },
+    "proxy": {
+        "remoteUrl": "http://archive.ubuntu.com/ubuntu/",
+        "contentMaxAge": 1440,
+        "metadataMaxAge": 1440
+    },
+    "storage": {
+        "blobStoreName": "apt",
+        "strictContentTypeValidation": true
+    },
+    "cleanup": {
+        "policyNames":[]
+    },
+    "online": true,
+    "negativeCache": {
+        "enabled": true,
+        "timeToLive": 1440
+    },
+    "httpClient": {
+        "blocked": false,
+        "autoBlock": true
+    },
+    "routingRule": "string",
+    "replication": {}
+}
