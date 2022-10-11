@@ -14,8 +14,6 @@ services:
     container_name: nexus_nexus
     hostname: nexus_nexus
     restart: unless-stopped
-    ports:
-      - 8081:8081
     volumes:
       - nexus_data:/nexus-data
     ulimits:
@@ -39,11 +37,11 @@ services:
     environment:
       HAPROXY_USER: ${HAPROXY_USER}
       HAPROXY_PASS: ${HAPROXY_PASS}
+      NEXUS_USERNAME: ${NEXUS_USERNAME}
+      NEXUS_PASSWORD: ${NEXUS_PASSWORD}
     ports:
       - 80:80
       - 81:81
-    volumes:
-      - ./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
     depends_on:
       - nexus
     logging:
