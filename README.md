@@ -8,7 +8,7 @@ Install [Docker](https://docs.docker.com/engine/install/ubuntu/)
 
 ```bash
 sudo apt-get update -y
-sudo apt-get install -y git
+sudo apt-get install -y git curl
 
 git clone https://github.com/amir2b/nexus-repository.git
 
