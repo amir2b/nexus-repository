@@ -12,6 +12,14 @@ sudo apt-get install -y git curl
 
 git clone https://github.com/amir2b/nexus-repository.git
 
+## Config firewall
+sudo ufw allow OpenSSH
+sudo ufw --force enable
+sudo ufw allow 80/tcp comment "nexus"
+sudo ufw allow 81/tcp comment "nexus-monitoring"
+sudo ufw allow 8080/tcp comment "nexus-docker"
+# sudo ufw status
+
 docker --version
 
 docker compose up
@@ -63,7 +71,7 @@ apt-get update
 sudo nano /etc/docker/daemon.json
 
 {
-  "registry-mirrors": [ "http://${NEXUS_IP}/docker" ]
+  "registry-mirrors": [ "http://${NEXUS_IP}:8080" ]
 }
 
 sudo systemctl restart docker

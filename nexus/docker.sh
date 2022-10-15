@@ -44,7 +44,8 @@ curl --silent -X POST "$NEXUS_API/repositories/docker/group" -u $NEXUS_USERNAME:
     "name": "docker",
     "docker": {
         "v1Enabled": true,
-        "forceBasicAuth": false
+        "forceBasicAuth": false,
+        "httpPort": 8080
     },
     "storage": {
         "blobStoreName": "docker",
