@@ -6,7 +6,7 @@ Nexus Repository is an open source repository that supports many artifact format
 
 Install [Docker](https://docs.docker.com/engine/install/ubuntu/)
 
-```bash
+```shell
 sudo apt-get update -y
 sudo apt-get install -y git curl
 
@@ -30,7 +30,7 @@ docker compose exec nexus cat /nexus-data/admin.password
 
 After login and change password, write new passowrd in `.env` file and run this command:
 
-```bash
+```shell
 nexus/initial.sh
 nexus/docker.sh
 nexus/apt.sh
@@ -40,7 +40,7 @@ nexus/apt.sh
 
 ### apt repository:
 
-```bash
+```shell
 sudo cp -i /etc/apt/sources.list /etc/apt/sources.list.BAK
 
 NEXUS_IP=127.0.0.1
@@ -50,15 +50,26 @@ sudo sed -i -E "s,^((.+) http://(.*)\.ubuntu\.com/ubuntu/? (.+))$,\2 http://${NE
 
 Add the new repository to apt's list of repos:
 
-```bash
+```shell
 echo "deb http://${NEXUS_IP}/${REPO_NAME}/ xenial main" >> /etc/apt/sources.list.d/your-custom.list
 
 apt-get update
 ```
 
+Add docker repository:
+
+```shell
+sudo mkdir -p /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] http://${NEXUS_IP}/apt-docker $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+apt-get update
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+```
+
 Authentication:
 
-```bash
+```shell
 echo "machine repository.domain.com" >> /etc/apt/auth.conf
 echo "login $NEXUS_USERNAME" >> /etc/apt/auth.conf
 echo "password $NEXUS_PASSWORD" >> /etc/apt/auth.conf
@@ -67,12 +78,10 @@ apt-get update
 
 ### docker registry-mirrors:
 
-```bash
-sudo nano /etc/docker/daemon.json
-
-{
-  "registry-mirrors": [ "http://${NEXUS_IP}:8080" ]
-}
+```shell
+echo "{
+    \"registry-mirrors\": [\"http://${NEXUS_IP}:8080\"]
+}" | sudo tee /etc/docker/daemon.json
 
 sudo systemctl restart docker
 ```
