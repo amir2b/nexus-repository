@@ -15,12 +15,22 @@ curl --silent -X POST "$NEXUS_API/blobstores/file" -u $NEXUS_USERNAME:$NEXUS_PAS
 }'
 
 TEMPLATE=$(cat nexus/templates/apt.json)
-repos=( "Jammy" "focal" "bionic" "xenial" "trusty" "kinetic" )
-for name in "${repos[@]}"; do
+repos=(
+    "Jammy http://archive.ubuntu.com/ubuntu/"
+    "focal http://archive.ubuntu.com/ubuntu/"
+    "bionic http://archive.ubuntu.com/ubuntu/"
+    "xenial http://archive.ubuntu.com/ubuntu/"
+    "trusty http://archive.ubuntu.com/ubuntu/"
+    "kinetic http://archive.ubuntu.com/ubuntu/"
+    "docker https://download.docker.com/linux/ubuntu"
+)
+for repo in "${repos[@]}"; do
+    repo=( $repo )
+    TEMP=$( echo $TEMPLATE | sed "s,\$REPOSITORY,${repo[0]},g" | sed "s,\$URL,${repo[1]}," )
     echo
     echo
-    echo "Create apt '$name' repositorie:"
-    curl --silent -X POST "$NEXUS_API/repositories/apt/proxy" -u $NEXUS_USERNAME:$NEXUS_PASSWORD -H 'Content-Type: application/json' -d "$(echo $TEMPLATE | sed "s/\$REPOSITORY/$name/g")"
+    echo "Create apt '${repo[0]}' repositorie:"
+    curl --silent -X POST "$NEXUS_API/repositories/apt/proxy" -u $NEXUS_USERNAME:$NEXUS_PASSWORD -H 'Content-Type: application/json' -d "$TEMP"
 
-    curl --silent -X POST "$NEXUS_API/repositories/apt-$name/health-check" -u $NEXUS_USERNAME:$NEXUS_PASSWORD
+    curl --silent -X POST "$NEXUS_API/repositories/apt-${repo[0]}/health-check" -u $NEXUS_USERNAME:$NEXUS_PASSWORD
 done
