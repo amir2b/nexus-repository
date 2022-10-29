@@ -2,7 +2,7 @@
 
 Nexus Repository is an open source repository that supports many artifact formats, including Docker, Java™, and npm. With the Nexus tool integration, pipelines in your toolchain can publish and retrieve versioned apps and their dependencies by using central repositories that are accessible from other environments.
 
-## Setup
+# Setup
 
 Install [Docker](https://docs.docker.com/engine/install/ubuntu/)
 
@@ -28,17 +28,19 @@ docker compose up
 docker compose exec nexus cat /nexus-data/admin.password
 ```
 
-After login and change password, write new passowrd in `.env` file and run this command:
+After login and change password, write new passowrd in `.env` file and restart docker and run this command:
 
 ```shell
+docker compose down && docker compose up -d
+
 nexus/initial.sh
 nexus/docker.sh
 nexus/apt.sh
 ```
 
-## Client
+# Client
 
-### apt repository:
+## apt repository:
 
 ```shell
 sudo cp -i /etc/apt/sources.list /etc/apt/sources.list.BAK
@@ -60,7 +62,7 @@ Add docker repository:
 
 ```shell
 sudo mkdir -p /etc/apt/keyrings
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+curl -fsSL https://${NEXUS_IP}/raw-docker/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] http://${NEXUS_IP}/apt-docker $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
 apt-get update
@@ -76,7 +78,7 @@ echo "password $NEXUS_PASSWORD" >> /etc/apt/auth.conf
 apt-get update
 ```
 
-### docker registry-mirrors:
+## docker registry-mirrors:
 
 ```shell
 echo "{

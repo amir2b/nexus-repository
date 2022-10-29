@@ -15,7 +15,15 @@ echo
 echo "Create docker blob stores:"
 curl --silent -X POST "$NEXUS_API/blobstores/file" -u $NEXUS_USERNAME:$NEXUS_PASSWORD -H 'Content-Type: application/json' -d '{
     "name": "docker",
-    "path": "/nexus-data/blobs/docker"
+    "path": "docker"
+}'
+
+echo
+echo
+echo "Create raw blob stores:"
+curl --silent -X POST "$NEXUS_API/blobstores/file" -u $NEXUS_USERNAME:$NEXUS_PASSWORD -H 'Content-Type: application/json' -d '{
+    "name": "raw",
+    "path": "raw"
 }'
 
 TEMPLATE=$(cat nexus/templates/docker.json)
@@ -55,4 +63,33 @@ curl --silent -X POST "$NEXUS_API/repositories/docker/group" -u $NEXUS_USERNAME:
         "memberNames": [ "docker-iranrepo", "docker-dockerir", "docker-dockerhub", "docker-dockerregistry", "docker-docker" ]
     },
     "online": true
+}'
+
+echo
+echo
+echo "Create docker raw:"
+curl --silent -X POST "$NEXUS_API/repositories/raw/proxy" -u $NEXUS_USERNAME:$NEXUS_PASSWORD -H 'Content-Type: application/json' -d '{
+    "name": "raw-docker",
+    "raw": {
+        "contentDisposition": "ATTACHMENT"
+    },
+    "proxy": {
+        "remoteUrl": "https://download.docker.com",
+        "contentMaxAge": 1440,
+        "metadataMaxAge": 1440
+    },
+    "storage": {
+        "blobStoreName": "raw",
+        "strictContentTypeValidation": true
+    },
+    "cleanup": null,
+    "online": true,
+    "negativeCache": {
+        "enabled": true,
+        "timeToLive": 1440
+    },
+    "httpClient": {
+        "blocked": false,
+        "autoBlock": true
+    }
 }'
