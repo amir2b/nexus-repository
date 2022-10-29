@@ -11,7 +11,7 @@ echo
 echo "Create apt blob stores:"
 curl --silent -X POST "$NEXUS_API/blobstores/file" -u $NEXUS_USERNAME:$NEXUS_PASSWORD -H 'Content-Type: application/json' -d '{
     "name": "apt",
-    "path": "/nexus-data/blobs/apt"
+    "path": "apt"
 }'
 
 TEMPLATE=$(cat nexus/templates/apt.json)
