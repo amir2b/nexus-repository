@@ -28,11 +28,9 @@ docker compose up
 docker compose exec nexus cat /nexus-data/admin.password
 ```
 
-After login and change password, write new passowrd in `.env` file and restart docker and run this command:
+After login and change password, write new passowrd in `.env` file and run this command:
 
 ```shell
-docker compose down && docker compose up -d
-
 nexus/initial.sh
 nexus/docker.sh
 nexus/apt.sh
