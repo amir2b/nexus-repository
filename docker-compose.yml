@@ -37,8 +37,6 @@ services:
     environment:
       HAPROXY_USER: ${HAPROXY_USER}
       HAPROXY_PASS: ${HAPROXY_PASS}
-      NEXUS_USERNAME: ${NEXUS_USERNAME}
-      NEXUS_PASSWORD: ${NEXUS_PASSWORD}
     ports:
       - 80:80
       - 81:81
@@ -51,3 +49,4 @@ services:
         max-file: "10"
     networks:
       - backend
+
