@@ -1,4 +1,4 @@
-version: '3.5'
+version: '3'
 
 networks:
   backend:
@@ -7,13 +7,21 @@ networks:
 volumes:
   nexus_data:
 
-services:
+x-base: &base
+  restart: unless-stopped
+  logging:
+    options:
+      max-size: "1m"
+      max-file: "10"
+  networks:
+    - backend
 
+services:
   nexus:
+    <<: *base
     image: sonatype/nexus3:${NEXUS_VERSION:-latest}
     container_name: nexus_nexus
     hostname: nexus_nexus
-    restart: unless-stopped
     volumes:
       - nexus_data:/nexus-data
     ulimits:
@@ -21,19 +29,13 @@ services:
       nofile:
         soft: 65536
         hard: 65536
-    logging:
-      options:
-        max-size: "1m"
-        max-file: "10"
-    networks:
-      - backend
 
   haproxy:
+    <<: *base
     build: haproxy
     image: nexus_haproxy
     container_name: nexus_haproxy
     hostname: nexus_haproxy
-    restart: unless-stopped
     environment:
       HAPROXY_USER: ${HAPROXY_USER}
       HAPROXY_PASS: ${HAPROXY_PASS}
@@ -43,10 +45,3 @@ services:
       - 8080:8080
     depends_on:
       - nexus
-    logging:
-      options:
-        max-size: "1m"
-        max-file: "10"
-    networks:
-      - backend
-
