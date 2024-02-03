@@ -16,7 +16,7 @@ curl --silent -X POST "$NEXUS_API/blobstores/file" -u $NEXUS_USERNAME:$NEXUS_PAS
 
 TEMPLATE=$(cat nexus/templates/apt.json)
 repos=(
-    "Jammy http://archive.ubuntu.com/ubuntu/"
+    "jammy http://archive.ubuntu.com/ubuntu/"
     "focal http://archive.ubuntu.com/ubuntu/"
     "bionic http://archive.ubuntu.com/ubuntu/"
     "xenial http://archive.ubuntu.com/ubuntu/"

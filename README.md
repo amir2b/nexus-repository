@@ -12,7 +12,7 @@ sudo apt-get install -y git make curl
 
 git clone https://github.com/amir2b/nexus-repository.git
 
-cp -n .env.example .env
+make init
 
 ## Config firewall
 sudo ufw allow OpenSSH
@@ -61,8 +61,8 @@ sudo mkdir -p /etc/apt/keyrings
 curl -fsSL http://${NEXUS_IP}/raw-docker/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
 # curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
 
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] http://${NEXUS_IP}/apt-docker $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-# echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee -a /etc/apt/sources.list.d/docker.list > /dev/null
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo $VERSION_CODENAME) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo sed -Ei "s,^((.+) https://download\.docker\.com/linux/ubuntu (.+))$,\2 http://${NEXUS_IP}/apt-docker \3\n#\1,g" /etc/apt/sources.list.d/docker.list
 
 apt-get update
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
@@ -86,3 +86,7 @@ echo "{
 
 sudo systemctl restart docker
 ```
+
+http://127.0.0.1:8080/v2/redis/tags/list
+http://127.0.0.1:8080/v2/library/redis/manifests/latest
+http://127.0.0.1:8080/v2/_catalog

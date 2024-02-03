@@ -29,6 +29,7 @@ curl --silent -X POST "$NEXUS_API/blobstores/file" -u $NEXUS_USERNAME:$NEXUS_PAS
 TEMPLATE=$(cat nexus/templates/docker.json)
 repos=(
     "docker HUB https://registry-1.docker.io"
+    "iranserver REGISTRY https://docker.iranserver.com"
     "iranrepo REGISTRY https://docker.iranrepo.ir"
     "dockerir REGISTRY https://registry.docker.ir"
     "dockerhub REGISTRY https://dockerhub.ir"
@@ -60,7 +61,7 @@ curl --silent -X POST "$NEXUS_API/repositories/docker/group" -u $NEXUS_USERNAME:
         "strictContentTypeValidation": true
     },
     "group": {
-        "memberNames": [ "docker-iranrepo", "docker-dockerir", "docker-dockerhub", "docker-dockerregistry", "docker-docker" ]
+        "memberNames": [ "docker-iranserver", "docker-iranrepo", "docker-dockerir", "docker-dockerhub", "docker-dockerregistry", "docker-docker" ]
     },
     "online": true
 }'

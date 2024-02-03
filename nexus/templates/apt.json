@@ -23,7 +23,7 @@
     },
     "httpClient": {
         "blocked": false,
-        "autoBlock": true
+        "autoBlock": false
     },
     "routingRule": "string",
     "replication": {}

@@ -33,7 +33,6 @@ services:
   haproxy:
     <<: *base
     build: haproxy
-    image: nexus_haproxy
     container_name: nexus_haproxy
     hostname: nexus_haproxy
     environment:
