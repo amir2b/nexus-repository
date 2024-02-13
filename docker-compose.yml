@@ -22,6 +22,8 @@ services:
     image: sonatype/nexus3:${NEXUS_VERSION:-latest}
     container_name: nexus_nexus
     hostname: nexus_nexus
+    environment:
+      TZ: Asia/Tehran
     volumes:
       - nexus_data:/nexus-data
     ulimits:
@@ -36,6 +38,7 @@ services:
     container_name: nexus_haproxy
     hostname: nexus_haproxy
     environment:
+      TZ: Asia/Tehran
       HAPROXY_USER: ${HAPROXY_USER}
       HAPROXY_PASS: ${HAPROXY_PASS}
     ports:
